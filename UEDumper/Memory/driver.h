@@ -4,7 +4,7 @@
 //add any other includes here your driver might use
 #include <Windows.h>
 #include <tlhelp32.h>
-
+#include "Driver/DRV.h"
 /*
 ██████╗░██╗░░░░░███████╗░█████╗░░██████╗███████╗  ██████╗░███████╗░█████╗░██████╗░██╗
 ██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝██╔════╝  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║
@@ -30,6 +30,7 @@ HANDLE procHandle = nullptr;
 inline void init()
 {
     //...
+    driver->Init();
 }
 
 uint64_t _getBaseAddress(const wchar_t* processName, int& pid);
@@ -59,17 +60,7 @@ inline void loadData(std::string& processName, uint64_t& baseAddress, int& proce
  */
 inline void _read(const void* address, void* buffer, const DWORD64 size)
 {
-    size_t bytes_read = 0;
-    BOOL b = ReadProcessMemory(procHandle, address, buffer, size, &bytes_read);
-    //if failed, try with lower byte amount
-    if (!b)
-    {
-        //always read 10 bytes lower
-        for (int i = 1; i < size && !b; i += 10)
-        {
-            b = ReadProcessMemory(procHandle, address, buffer, size - i, nullptr);
-        }
-    }
+   driver->ReadMemory((PVOID)address, buffer, size);
 }
 
 
@@ -81,7 +72,7 @@ inline void _read(const void* address, void* buffer, const DWORD64 size)
  */
 inline void _write(void* address, const void* buffer, const DWORD64 size)
 {
-    WriteProcessMemory(procHandle, address, buffer, size, nullptr);
+    driver->WriteMemory(address, (PVOID)buffer, size);
 }
 
 
@@ -142,5 +133,5 @@ uint64_t _getBaseAddress(const wchar_t* processName, int& pid)
  */
 void attachToProcess(const int& pid)
 {
-    procHandle = OpenProcess(PROCESS_ALL_ACCESS, 0, pid);
+    driver->AttachByID(pid);
 }

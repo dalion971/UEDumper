@@ -278,6 +278,15 @@
     <ClInclude Include="Resources\Dumpspace\dumpspace.h">
       <Filter>Resources\Dumpspace</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Generation\packageSorter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\Driver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\DRV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="UEDumper.rc">

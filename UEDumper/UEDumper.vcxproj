@@ -182,6 +182,8 @@
     <ClCompile Include="UEDumper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Driver\Driver.hpp" />
+    <ClInclude Include="Driver\DRV.h" />
     <ClInclude Include="Engine\Core\Core.h" />
     <ClInclude Include="Engine\Core\EngineStructs.h" />
     <ClInclude Include="Engine\Core\FName_decryption.h" />
