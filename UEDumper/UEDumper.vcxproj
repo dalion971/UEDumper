@@ -175,6 +175,11 @@
     <ClCompile Include="Frontend\Windows\PackageViewerWindow.cpp" />
     <ClCompile Include="Frontend\Windows\PackageWindow.cpp" />
     <ClCompile Include="Frontend\Windows\TopRowButtons.cpp" />
+    <ClCompile Include="Memory\kdmapper\intel_driver.cpp" />
+    <ClCompile Include="Memory\kdmapper\kdmapper.cpp" />
+    <ClCompile Include="Memory\kdmapper\portable_executable.cpp" />
+    <ClCompile Include="Memory\kdmapper\service.cpp" />
+    <ClCompile Include="Memory\kdmapper\utils.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Resources\AES\AES.cpp" />
     <ClCompile Include="Resources\Dumpspace\dumpspace.cpp" />
@@ -217,6 +222,13 @@
     <ClInclude Include="Frontend\Windows\PackageWindow.h" />
     <ClInclude Include="Frontend\Windows\TopRowButtons.h" />
     <ClInclude Include="Memory\driver.h" />
+    <ClInclude Include="Memory\kdmapper\include\intel_driver.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\intel_driver_resource.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\kdmapper.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\nt.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\portable_executable.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\service.hpp" />
+    <ClInclude Include="Memory\kdmapper\include\utils.hpp" />
     <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Resources\AES\AES.h" />

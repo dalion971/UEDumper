@@ -1,7 +1,8 @@
 #pragma once
 
 #include "stdafx.h"
-
+#include "stdio.h"
+#include "Memory\kdmapper\include\utils.hpp"
 namespace windows
 {
 	class LogWindow

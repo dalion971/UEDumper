@@ -18,7 +18,10 @@ Memory::Memory()
 		status = inizilaized;
 		windows::LogWindow::Log(windows::LogWindow::log_0, "MEMORY", "Initialized Memory class!");
 	}
-
+	if (status == inizilaized)
+	{
+		windows::LogWindow::Log(windows::LogWindow::log_0, "MEMORY", "Memory class already initialized!");
+	}
 }
 
 Memory::LoadError Memory::load(std::string processName)
@@ -97,6 +100,8 @@ int Memory::getProcessID()
 {
 	return processID;
 }
+
+
 
 int Memory::getTotalReads()
 {

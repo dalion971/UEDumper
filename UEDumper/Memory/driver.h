@@ -5,6 +5,9 @@
 #include <Windows.h>
 #include <tlhelp32.h>
 #include "Driver/DRV.h"
+#include "kdmapper/include/kdmapper.hpp"
+#include "Driver/Driver.hpp"
+
 /*
 ██████╗░██╗░░░░░███████╗░█████╗░░██████╗███████╗  ██████╗░███████╗░█████╗░██████╗░██╗
 ██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝██╔════╝  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║
@@ -27,9 +30,48 @@ HANDLE procHandle = nullptr;
 //in case you need to initialize anything BEFORE your com works, you can do this in here.
 //this function IS NOT DESIGNED to already take the process name as input or anything related to the target process
 //use the function "load" below which will contain data about the process name
+bool load_driver()
+{
+
+
+	system("sc config vgc start= disabled & sc config vgk start= disabled & net stop vgc & net stop vgk & sc delete vgc & sc delete vgk & taskkill /IM vgtray.exe");
+	bool free = false; //
+	bool mdlMode = true;
+	bool passAllocationPtr = false;
+
+	HANDLE iqvw64e_device_handle = 0;
+
+	if (intel_driver::IsRunning())
+	{
+		return false;
+	}
+
+	iqvw64e_device_handle = intel_driver::Load();
+
+	NTSTATUS exitCode = 0;
+	if (!kdmapper::MapDriver(iqvw64e_device_handle, (BYTE*)kernel_driver, 0, 0, free, true, kdmapper::AllocationMode::AllocateMdl, passAllocationPtr, nullptr, &exitCode))
+	{
+
+		intel_driver::Unload(iqvw64e_device_handle);
+		return false;
+
+	}
+	intel_driver::Unload(iqvw64e_device_handle);
+	Sleep(500);
+
+	return true;
+
+
+}
 inline void init()
 {
     //...
+    // kdmapper
+    if (!load_driver())
+    {
+        MessageBoxA(NULL, "Failed to load driver!", "Error", MB_ICONERROR);
+        exit(1);
+    }
     driver->Init();
 }
 
