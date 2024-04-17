@@ -204,7 +204,9 @@ uint64_t Memory::patternScan(int flag, const char* pattern, const std::string& m
 		const uint64_t uAddr = reinterpret_cast<uint64_t>(addr);
 		if (flag & OFFSET_SIG_RVA)
 		{
-			const auto res = vaStart + i + *reinterpret_cast<int*>(uAddr + 3) + 7;
+			int k;
+			for(k = 0; mask[k] != '?'; k++);
+			const auto res = vaStart + i + *reinterpret_cast<int*>(uAddr + k) + 7;
 			patternMap.insert(std::pair(pattern, res));
 			return res;
 		}

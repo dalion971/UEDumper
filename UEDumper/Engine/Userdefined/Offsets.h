@@ -103,10 +103,22 @@ struct Offset
 inline std::vector<Offset> setOffsets()
 {
 	std::vector<Offset> offsets;
+#if UE_VERSION >= UE_5_32
+	// ??0FName@@QEAA@AEBUFNameEntrySerialized@@@Z
+	offsets.push_back({ OFFSET_SIGNATURE_FOLLOW | OFFSET_DS, "OFFSET_GNAMES", 0, "\x48\x8d\x05\x00\x00\x00\x00\xeb\x13\x48\x8d", "xxx????xxxx"});
+	// ?IncrementalPurgeGarbage@@YAX_NN@Z
+	offsets.push_back({ OFFSET_SIGNATURE_FOLLOW | OFFSET_DS, "OFFSET_GOBJECTS", 0, "\x48\x8D\x0D\x00\x00\x00\x00\xC6\x05\x00\x00\x00\x00\x01\xe8\x00\x00\x00\x00\xc6\x05\x00\x00\x00\x00\x01", "xxx????xx????xx????xx????x"});
+	// ?Tick@FEngineLoop@@UEAAXXZ
+	offsets.push_back({ OFFSET_SIGNATURE_FOLLOW | OFFSET_DS | OFFSET_LIVE_EDITOR, "OFFSET_UWORLD", 0, "\x48\x8B\x1D\x00\x00\x00\x00\x48\x85\xDB\x00\x00\x41\xb0\x01", "xxx????xxx??xxx"});
+
+#else
 
 	offsets.push_back({ OFFSET_ADDRESS | OFFSET_DS, "OFFSET_GNAMES", 0x6832C80 });
 	offsets.push_back({ OFFSET_ADDRESS | OFFSET_DS, "OFFSET_GOBJECTS", 0x68D9030 });
 	offsets.push_back({ OFFSET_ADDRESS | OFFSET_DS | OFFSET_LIVE_EDITOR, "OFFSET_UWORLD", 0x6A45F08 });
+
+#endif
+
 
 	//offsets.push_back({ OFFSET_ADDRESS | OFFSET_DH, "OFFSET_GNAMES", 0x562D340 });
 	//offsets.push_back({ OFFSET_ADDRESS | OFFSET_DH, "OFFSET_GOBJECTS", 0x545C6E0 });
