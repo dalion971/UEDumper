@@ -800,10 +800,10 @@ fieldType FProperty::getType()
         return { true, PropertyType::EnumProperty, castTo<FEnumProperty>()->typeName() };
 
     case ECCF_FInterfaceProperty:
-        return { true, PropertyType::InterfaceProperty, FInterfaceProperty::typeName(), castTo<FInterfaceProperty>()->getSubTypes() };
+        return { true, PropertyType::InterfaceProperty, FInterfaceProperty::typeNameStatic(), castTo<FInterfaceProperty>()->getSubTypes() };
 
     case ECCF_FMapProperty:
-        return { true, PropertyType::MapProperty, FMapProperty::typeName(), castTo<FMapProperty>()->getSubTypes() };
+        return { true, PropertyType::MapProperty, FMapProperty::typeNameStatic(), castTo<FMapProperty>()->getSubTypes() };
 
     case ECCF_FByteProperty:
     {
@@ -838,7 +838,7 @@ fieldType FProperty::getType()
         return { true, PropertyType::LazyObjectProperty, FObjectPropertyBase::lazyTypeName(), castTo<FObjectPropertyBase>()->getSubTypes() };
 
     case ECCF_FSetProperty:
-        return { true, PropertyType::SetProperty, FSetProperty::typeName(), castTo<FSetProperty>()->getSubTypes() };
+        return { true, PropertyType::SetProperty, FSetProperty::typeNameStatic(), castTo<FSetProperty>()->getSubTypes() };
 
         //case ECCF_FFieldPathProperty:
         //    return { true, PropertyType::FieldPathProperty, FFieldPathProperty::typeName(), castTo<FFieldPathProperty>().getSubTypes() };

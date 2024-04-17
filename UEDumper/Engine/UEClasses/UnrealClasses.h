@@ -978,7 +978,7 @@ public:
 
 	uint8_t			BlueprintReplicationCondition;
 	int32_t			Offset;
-
+#if UE_VERSION < UE_5_30
 	FName			RepNotifyFunc;
 
 	/** In memory only: Linked list of properties from most-derived to base **/
@@ -992,7 +992,21 @@ public:
 
 	/** In memory only: Linked list of properties requiring post constructor initialization.**/
 	FProperty* PostConstructLinkNext;
+#else
+	/** In memory only: Linked list of properties from most-derived to base **/
+	FProperty* PropertyLinkNext;
 
+	/** In memory only: Linked list of object reference properties from most-derived to base **/
+	FProperty* NextRef;
+
+	/** In memory only: Linked list of properties requiring destruction. Note this does not include things that will be destroyed byt he native destructor **/
+	FProperty* DestructorLinkNext;
+
+	/** In memory only: Linked list of properties requiring post constructor initialization.**/
+	FProperty* PostConstructLinkNext;
+
+	FName			RepNotifyFunc;
+#endif
 	//static std::string typeName() { return "UProperty"; }
 	//FIXMEEEE
 	static UClass staticClass();
@@ -1120,13 +1134,43 @@ public:
 	UProperty* getInterfaceClass() const;
 
 	//dont forget <>
-	static std::string typeName() { return "TScriptInterface"; }
+	static std::string typeNameStatic() { return "TScriptInterface"; }
 
 	std::vector<fieldType> getSubTypes() const { return std::vector{ getInterfaceClass()->getType() }; }
 
-	//std::string typeName() const { return "struct TScriptInterface<" + getInterfaceClass().getType().cName + ">"; }
+	std::string typeName() const { return "struct TScriptInterface<" + getInterfaceClass()->getType().name + ">"; }
 };
+// https://github.com/EpicGames/UnrealEngine/blob/072300df18a94f18077ca20a14224b5d99fee872/Engine/Source/Runtime/Core/Public/Containers/SparseArray.h#L1261
+struct FScriptSparseArrayLayout
+{
+	// ElementOffset is at zero offset from the TSparseArrayElementOrFreeListLink - not stored here
+	int32_t Alignment;
+	int32_t Size;
+};
+// https://github.com/EpicGames/UnrealEngine/blob/072300df18a94f18077ca20a14224b5d99fee872/Engine/Source/Runtime/Core/Public/Containers/Set.h#L1834
+struct FScriptSetLayout
+{
+	// int32 ElementOffset = 0; // always at zero offset from the TSetElement - not stored here
+	int32_t HashNextIdOffset;
+	int32_t HashIndexOffset;
+	int32_t Size;
 
+	FScriptSparseArrayLayout SparseArrayLayout;
+};
+// https://github.com/EpicGames/UnrealEngine/blob/072300df18a94f18077ca20a14224b5d99fee872/Engine/Source/Runtime/Core/Public/Containers/Map.h#L1665
+struct FScriptMapLayout
+{
+	// int32 KeyOffset; // is always at zero offset from the TPair - not stored here
+	int32_t ValueOffset;
+
+	FScriptSetLayout SetLayout;
+};
+// https://github.com/EpicGames/UnrealEngine/blob/072300df18a94f18077ca20a14224b5d99fee872/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectMacros.h#L494
+enum class EMapPropertyFlags : uint8_t
+{
+	None,
+	UsesMemoryImageAllocator
+};
 // https://github.com/EpicGames/UnrealEngine/blob/5.2/Engine/Source/Runtime/CoreUObject/Public/UObject/UnrealType.h#L3846
 class FMapProperty : public FProperty
 {
@@ -1134,18 +1178,18 @@ public:
 	FProperty* KeyProp;
 	FProperty* ValueProp;
 
-	//FScriptMapLayout MapLayout;
-	//EMapPropertyFlags MapFlags;
+	FScriptMapLayout MapLayout;
+	EMapPropertyFlags MapFlags;
 
 	FProperty* getKeyProp() const;
 
 	FProperty* getValueProp() const;
 
-	static std::string typeName() { return "TMap"; }
+	static std::string typeNameStatic() { return "TMap"; }
 
 	std::vector<fieldType> getSubTypes() const { return std::vector{getKeyProp()->getType(), getValueProp()->getType()}; }
 
-	//std::string typeName() const { return "struct TMap<" + getKeyProp().getType().cName + ", " + getValueProp().getType().cName + ">"; }
+	std::string typeName() const { return "struct TMap<" + getKeyProp()->getType().name + ", " + getValueProp()->getType().name + ">"; }
 };
 
 // https://github.com/EpicGames/UnrealEngine/blob/5.2/Engine/Source/Runtime/CoreUObject/Public/UObject/UnrealType.h#L4004
@@ -1156,10 +1200,10 @@ public:
 
 	FProperty* getElementProp() const;
 
-	static std::string typeName() { return "TSet"; }
+	static std::string typeNameStatic() { return "TSet"; }
 
 	std::vector<fieldType> getSubTypes() const { return std::vector{ getElementProp()->getType() }; }
-	//std::string typeName() const { return "struct TSet<" + getElementProp().getType().cName + ">"; }
+	std::string typeName() const { return "struct TSet<" + getElementProp()->getType().name + ">"; }
 };
 
 class FFieldPathProperty : public FProperty

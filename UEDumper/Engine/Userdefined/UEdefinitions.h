@@ -54,12 +54,19 @@
 #define UE_5_01		10
 #define UE_5_02		11
 #define UE_5_03		12
+#define UE_5_10     13
+#define UE_5_11     14
+#define UE_5_20     15
+#define UE_5_21     16
+#define UE_5_30     17
+#define UE_5_31     18
+#define UE_5_32     19
 
 
 /* UE version settings */
 
 //set your games ue version
-#define UE_VERSION UE_5_02
+#define UE_VERSION UE_5_32
 
 
 /* FName settings */
