@@ -179,6 +179,8 @@
     </ClCompile>
     <ClCompile Include="Memory\kdmapper\utils.cpp">
       <Filter>Memory\kdmapper</Filter>
+    <ClCompile Include="Frontend\StrucGraph.cpp">
+      <Filter>Frontend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +330,12 @@
     </ClInclude>
     <ClInclude Include="Memory\kdmapper\include\utils.hpp">
       <Filter>Memory\kdmapper\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\StrucGraph.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Userdefined\FeatureFlags.h">
+      <Filter>Engine\User Defined</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
